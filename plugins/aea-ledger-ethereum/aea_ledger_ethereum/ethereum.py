@@ -471,7 +471,7 @@ class SignedTransactionTranslator:
     def to_dict(signed_transaction: SignedTransaction) -> Dict[str, Union[str, int]]:
         """Write SignedTransaction to dict."""
         signed_transaction_dict: Dict[str, Union[str, int]] = {
-            "raw_transaction": cast(str, signed_transaction.rawTransaction.hex()),
+            "raw_transaction": cast(str, signed_transaction.raw_transaction.hex()),
             "hash": cast(str, signed_transaction.hash.hex()),
             "r": cast(int, signed_transaction.r),
             "s": cast(int, signed_transaction.s),
@@ -490,7 +490,7 @@ class SignedTransactionTranslator:
                 f"Invalid for conversion. Found object: {signed_transaction_dict}."
             )
         signed_transaction = SignedTransaction(
-            rawTransaction=HexBytes(
+            raw_transaction=HexBytes(
                 cast(str, signed_transaction_dict["raw_transaction"])
             ),
             hash=HexBytes(cast(str, signed_transaction_dict["hash"])),
@@ -1314,7 +1314,7 @@ class EthereumApi(LedgerApi, EthereumHelper):
         """
         signed_transaction = SignedTransactionTranslator.from_dict(tx_signed)
         hex_value = self._api.eth.send_raw_transaction(  # pylint: disable=no-member
-            signed_transaction.rawTransaction
+            signed_transaction.raw_transaction
         )
         tx_digest = hex_value.hex()
         _default_logger.debug(
